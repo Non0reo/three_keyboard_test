@@ -12,6 +12,7 @@ const camera: THREE.Camera = new THREE.PerspectiveCamera( 75, window.innerWidth 
 const orbit: OrbitControls = new OrbitControls(camera, renderer.domElement);
 
 let keyModel: GLTF;
+let mousePos: {x: number, y: number};
 
 async function init() {
   renderer.setSize(window.innerWidth, window.innerHeight)
@@ -29,7 +30,7 @@ async function init() {
 
 
   const loader = new GLTFLoader()
-  keyModel = await loader.loadAsync('models/keys.glb');
+  keyModel = await loader.loadAsync('models/seance1.glb');
   scene.add( keyModel.scene );
   // keyModel.scene.traverse(obj => {
   //   if(obj.name.includes('Key') && obj.type === 'Mesh') {
@@ -43,21 +44,32 @@ async function init() {
   const mesh = new HTMLMesh( element );
   mesh.scale.multiplyScalar(100);
   element.hidden = true;
-  scene.add( mesh );
+  // scene.add( mesh );
 
 
   window.addEventListener('keydown', e => {
+    e.preventDefault();
     const obj = keyModel.scene.getObjectByName(e.code) as THREE.Mesh | undefined;
     if(!obj) return;
     
     animate(obj.position, {
-      y: [0, -1],
+      y: [-0.02, -0.05],
       duration: 100,
       ease: 'outExpo',
       loop: 1,
       alternate: true,
     })
   });
+
+  window.addEventListener('mousemove', (e: MouseEvent) => {
+    console.log(e);
+    
+    const delta = { x: e.x - mousePos.x, y: e.y - mousePos.y };
+
+    mousePos = { x: e.x, y: e.y }
+  })
+
+
 
   camera.position.set(0, 10, 10);
   renderer.setAnimationLoop(update);

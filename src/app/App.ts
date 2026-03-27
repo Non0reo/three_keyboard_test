@@ -67,6 +67,12 @@ export class App {
 		this.scene.add( this.modelScene );
 		console.log(this.modelScene)
 
+		//keycaps
+		const keysGroup = this.modelScene.getObjectByName('Keys') as THREE.Object3D;
+		keysGroup.children.forEach(key => {
+			key.userData = {basePos: JSON.parse(JSON.stringify(key.position)) as Vec3}
+		})
+
 		this.mouseModel = this.modelScene.getObjectByName('Mouse') as THREE.Object3D;
 		this.mouseModel.userData = {basePos: JSON.parse(JSON.stringify(this.mouseModel.position)) as Vec3};
 		console.log(this.mouseModel)
@@ -93,15 +99,11 @@ export class App {
 
 
 		//computer Screen
-
-		this.canvasTexture = new THREE.CanvasTexture(this.computerScreen.renderer.canvas);
+		this.canvasTexture = new THREE.CanvasTexture(this.computerScreen.application.canvas);
 		const screenMesh = this.modelScene.getObjectByName('Screen') as THREE.Mesh;
 		if (!screenMesh) throw new Error('No Screen Mesh');
 
-		//this.canvasTexture.
-
 		screenMesh.material = new THREE.MeshBasicMaterial({ map: this.canvasTexture })
-
 	}
 
 	initEvents() {
@@ -111,7 +113,7 @@ export class App {
 			if(!obj) return;
 			
 			animate(obj.position, {
-				y: [-0.02, -0.05],
+				y: [obj.userData.basePos.y, -0.05],
 				duration: 100,
 				ease: 'outExpo',
 				loop: 1,

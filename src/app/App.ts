@@ -7,6 +7,8 @@ import { ComputerScreen } from './ComputerScreen';
 
 
 export class App {
+	textInput: HTMLInputElement = document.querySelector('#computer-screen-textinput') as HTMLInputElement;
+
 	renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
 	scene: THREE.Scene = new THREE.Scene();
 	camera: THREE.Camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -107,8 +109,8 @@ export class App {
 	}
 
 	initEvents() {
-		window.addEventListener('keydown', e => {
-			e.preventDefault();
+		window.addEventListener('keydown', (e: KeyboardEvent) => {
+			if (e.code.match(/F\d/g)) e.preventDefault();
 			const obj = this.modelScene.getObjectByName(e.code) as THREE.Mesh | undefined;
 			if(!obj) return;
 			
@@ -118,7 +120,7 @@ export class App {
 				ease: 'outExpo',
 				loop: 1,
 				alternate: true,
-			})
+			});
 		});
 
 		window.addEventListener('mousemove', (e: MouseEvent) => {
@@ -143,7 +145,12 @@ export class App {
 
 
 			this.mousePos = { x: e.x, y: e.y }
-		})
+		});
+
+		window.addEventListener('DOMContentLoaded', () => this.textInput.focus())
+		this.textInput.addEventListener('input', (e: InputEvent) => this.computerScreen.onInputChange(e) );
+		this.textInput.addEventListener('change', (e: Event) => this.computerScreen.onInputEnter(e) );
+
 	}
 	
 	

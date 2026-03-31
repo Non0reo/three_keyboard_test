@@ -58,3 +58,11 @@ body {
   width: 100px;
   background-color: red;
 }
+
+input#computer-screen-textinput {
+  position: fixed;
+  top: -10rem;
+  width: 0;
+  overflow: hidden;
+  /* opacity: 0%; */
+}

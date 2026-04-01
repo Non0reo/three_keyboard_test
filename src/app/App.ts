@@ -136,7 +136,7 @@ export class App {
 	}
 
 	initEvents() {
-		const onDomLoaded = () => {
+		const loadEvents = () => {
 			this.textInput.focus()
 
 			window.addEventListener('resize', () => {
@@ -197,7 +197,9 @@ export class App {
 			window.addEventListener('wheel', (e) => this.computerScreen.onWheelEvent(e, this.castedObjects[0]?.object.name === 'Screen'));
 		}
 
-		window.addEventListener('DOMContentLoaded', onDomLoaded)
+		
+		//window.addEventListener('DOMContentLoaded', loadEvents)
+		loadEvents();
 		this.textInput.addEventListener('input', (e: Event) => this.computerScreen.onInputChange(e) );
 		// this.textInput.addEventListener('change', (e: Event) => this.computerScreen.onInputEnter(e) );
 

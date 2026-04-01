@@ -3,8 +3,20 @@ import type { Message } from "../../types/shell";
 
 export function parseCommand(command: string): Message[] {
 
-  if(command.startsWith('help')) return [{ content: "EXE HELP", state: 'info' }, { content: helpSheet, state: 'return' }]
+  const firstToken = command.match(/^([\w\-]+)/gm)?.[0] ?? '';
+  const args = command.replace(firstToken, '').trim()
+  /* const tokens = command.split(' ');
+  const firstToken = tokens[0]; */
+
+  switch (firstToken) {
+    case 'help':  return [{ content: "EXE HELP", state: 'info' }, { content: helpSheet, state: 'return' }];
+    case 'greet': return [{ content: "*** Nono Shell v1.0.0 ***", state: 'info' }];
+    case 'echo':  return [{ content: args, state: 'return' }];
+  }
+
+  /* if(command.startsWith('help')) return [{ content: "EXE HELP", state: 'info' }, { content: helpSheet, state: 'return' }]
   if(command.startsWith('greet')) return [{ content: "*** Nono Shell v1.0.0 ***", state: 'info' }];
+  if(command.startsWith('echo')) return [{ content: "*** Nono Shell v1.0.0 ***", state: 'info' }]; */
 
   const evalString = command.replace('console.log(', 'consoleLogInterpreter(');
   return [{ content: eval(`${evalString}`) as string, state: 'return' }];

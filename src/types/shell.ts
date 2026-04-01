@@ -1,8 +1,9 @@
-type State = 'error' | 'info' | 'command';
+type State = 'error' | 'info' | 'command' | 'return';
 
 type Message = {
   content: string,
-  state: State
+  state: State,
+  hasFailed?: boolean;
 }
 
 export type {

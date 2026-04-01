@@ -1,0 +1,6 @@
+
+> help          : get this help message
+> greet         : gives version of shell
+> run [program] : run a program from the following list
+    - DVD
+    - 

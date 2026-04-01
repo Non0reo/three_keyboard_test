@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { animate } from 'animejs';
-import { GLTFLoader, DRACOLoader, Line2, LineGeometry, LineMaterial, OrbitControls, type GLTF, HDRLoader, RoomEnvironment, AnaglyphEffect } from 'three/examples/jsm/Addons.js';
+import { GLTFLoader, DRACOLoader, Line2, LineGeometry, LineMaterial, OrbitControls, type GLTF, HDRLoader, AnaglyphEffect } from 'three/examples/jsm/Addons.js';
 import type { Vec2, Vec3 } from '../types/vec'
 import { ComputerScreen } from './ComputerScreen';
 
@@ -126,11 +126,11 @@ export class App {
 		const screenMesh = this.modelScene.getObjectByName('Screen') as THREE.Mesh;
 		if (!screenMesh) throw new Error('No Screen Mesh');
 
-		screenMesh.material = new THREE.MeshBasicMaterial({ map: this.canvasTexture })
-		// const material = screenMesh.material as THREE.MeshStandardMaterial;
-		// material.map = this.canvasTexture;
-		// material.needsUpdate = true;
-		// screenMesh.material = new THREE.MeshStandardMaterial({ ...screenMesh.material, map: this.canvasTexture})
+		screenMesh.material = new THREE.MeshStandardMaterial({ 
+			map: this.canvasTexture,
+			roughness: 0.5,
+			metalness: 0.5,
+		});
 
 		this.canvasTexture.needsUpdate = true;
 	}

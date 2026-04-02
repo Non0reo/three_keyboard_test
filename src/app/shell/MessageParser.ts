@@ -1,7 +1,8 @@
 import helpSheet from '../../assets/help.txt?raw'
 import type { Message } from "../../types/shell";
+import type { ComputerOS } from '../Computer';
 
-export function parseCommand(command: string): Message[] {
+export function parseCommand(command: string, context?: ComputerOS): Message[] {
 
   const firstToken = command.match(/^([\w\-]+)/gm)?.[0] ?? '';
   const args = command.replace(firstToken, '').trim()
@@ -12,6 +13,14 @@ export function parseCommand(command: string): Message[] {
     case 'help':  return [{ content: "EXE HELP", state: 'info' }, { content: helpSheet, state: 'return' }];
     case 'greet': return [{ content: "*** Nono Shell v1.0.0 ***", state: 'info' }];
     case 'echo':  return [{ content: args, state: 'return' }];
+    case 'exit':
+      context?.forceExitProgram();
+      break;
+    case 'run':  
+      const hasChangedProgram = context?.setProgram(context.getProgramByName(args));
+      console.log(hasChangedProgram, context?.getProgramByName(args))
+      if(hasChangedProgram) return [{ content: `Loading program "${args}"`, state: 'info' }];
+      else                  return [{ content: `Unable to load program "${args}"`, state: 'error' }];
   }
 
   /* if(command.startsWith('help')) return [{ content: "EXE HELP", state: 'info' }, { content: helpSheet, state: 'return' }]

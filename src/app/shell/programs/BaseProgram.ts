@@ -4,8 +4,10 @@ import type { Shell } from '../ShellManager';
 import type { Vec2 } from '../../../types/vec';
 
 export class BaseProgram extends PIXI.Container implements Program {
+	programID = 'BaseProgram';
   shell?: Shell;
   sizes: Vec2;
+	isActiveProgram: boolean = false;
 
   constructor(sizes: Vec2, shell?: Shell) {
      super({

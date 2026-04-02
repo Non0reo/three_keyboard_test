@@ -12,9 +12,10 @@ type Message = {
 
 
 interface Program extends PIXI.Container {
-  id?: string;
+  programID: string;
   shell?: Shell;
   sizes: Vec2;
+  isActiveProgram: boolean;
 
   initProgram(): Promise<void>;
   disposeProgram(): Promise<void>;

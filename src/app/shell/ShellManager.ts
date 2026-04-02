@@ -1,5 +1,6 @@
 import { parseCommand, parseMessages } from "./MessageParser";
 import type { Message } from "../../types/shell";
+import type { ComputerOS } from "../Computer";
 
 export class Shell {
   textInput: HTMLInputElement = document.querySelector('#computer-screen-textinput') as HTMLInputElement;
@@ -7,27 +8,25 @@ export class Shell {
 	commandList: string[] = [];
 	pastCommandsIndex: number = 0;
 
+	context: ComputerOS;
+
+	constructor(context: ComputerOS) {
+		this.context = context
+	}
+
   get parsedString() {
     return parseMessages(this.messagesList);
   }
 
   sendCommand() {
-    const inputValue = this.textInput.value;
-		let hasFailed: boolean = false;
-		let lateMessage: Message[] = [];
-
-		this.commandList.push(inputValue);
+		const command = this.textInput.value;
+		this.commandList.push(command);
 		
-		try {
-			lateMessage.push(...parseCommand(inputValue));
-		} catch (error) {
-			lateMessage.push({ content: error as string, state: 'error' });
-			hasFailed = true;
-		}
+		//the messages returned are the return values of the execute
+		const {messages, hasFailed} = this.executeCommand(command);
 
-		this.messagesList.push({ content: inputValue, state: 'command', hasFailed });
-
-		if(lateMessage) this.messagesList.push(...lateMessage);
+		this.messagesList.push({ content: command, state: 'command', hasFailed });
+		if(messages) this.messagesList.push(...messages);
 
 		this.textInput.value = "";
 		this.pastCommandsIndex = 0;
@@ -41,4 +40,18 @@ export class Shell {
 		input.setSelectionRange(input.value.length, input.value.length);
 		this.textInput.focus()
   }
+
+	executeCommand(command: string): { messages: Message[], hasFailed: boolean } {
+		let hasFailed: boolean = false;
+		let messages: Message[] = [];
+
+		try {
+			messages.push(...parseCommand(command, this.context));
+		} catch (error) {
+			messages.push({ content: error as string, state: 'error' });
+			hasFailed = true;
+		}
+
+		return { messages, hasFailed }
+	}
 }

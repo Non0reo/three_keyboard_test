@@ -1,16 +1,20 @@
 import * as PIXI from 'pixi.js';
+import { animate, steps } from 'animejs';
 import { BaseProgram } from "./BaseProgram";
 import type { Shell } from '../ShellManager';
 import type { Vec2 } from '../../../types/vec';
+import type { ComputerOS } from '../../Computer';
 
 export class ShellProgram extends BaseProgram {
-  id = 'Shell'
+  programID = 'Shell'
   textInput: HTMLInputElement = document.querySelector('#computer-screen-textinput') as HTMLInputElement;
   drawnText: PIXI.SplitText;
+  context: ComputerOS;
 
-  constructor(sizes: Vec2, shell: Shell) {
+  constructor(sizes: Vec2, shell: Shell, context: ComputerOS) {
     super(sizes, shell);
-
+    
+    this.context = context;
     this.drawnText = new PIXI.SplitText({
       text: shell.parsedString,
       x: 0,
@@ -36,6 +40,17 @@ export class ShellProgram extends BaseProgram {
     
     this.addChild(this.drawnText);
     this.updateTextCommands();
+  }
+
+  async initProgram(): Promise<void> {
+    this.drawnText.chars.forEach((char, i) => {
+      animate(char, {
+        alpha: [0, 1],
+        delay: i * 10,
+        duration: 100,
+        ease: steps(1)
+      })
+    })
   }
 
   update(_time: number): void {

@@ -2,13 +2,13 @@ import * as THREE from 'three';
 import { animate } from 'animejs';
 import { GLTFLoader, DRACOLoader, Line2, LineGeometry, LineMaterial, OrbitControls, type GLTF, HDRLoader, AnaglyphEffect } from 'three/examples/jsm/Addons.js';
 import type { Vec2, Vec3 } from '../types/vec'
-import { ComputerScreen } from './ComputerScreen';
+import { ComputerOS } from './Computer';
 
 
 export class App {
 	textInput: HTMLInputElement = document.querySelector('#computer-screen-textinput') as HTMLInputElement;
 
-	renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
+	renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({ antialias: true });
 	scene: THREE.Scene = new THREE.Scene();
 	camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 	orbit: OrbitControls;
@@ -26,7 +26,7 @@ export class App {
 	mouseCableGeometry: LineGeometry = new LineGeometry();
 	mouseCableMaterial: LineMaterial = new LineMaterial();
 
-	computerScreen: ComputerScreen = new ComputerScreen();
+	computer: ComputerOS = new ComputerOS();
 	canvasTexture?: THREE.CanvasTexture;
 	
 	constructor() {
@@ -111,7 +111,7 @@ export class App {
 		const points = this.mouseCableCurve.getPoints( 50 ).map(point => [point.x, point.y, point.z]).flat();
 		this.mouseCableGeometry.setPositions(points);
 		this.mouseCableMaterial = new LineMaterial( {
-			color: 0x776151,
+			color: 0x605040,
 			linewidth: 5, // in world units with size attenuation, pixels otherwise
 			dashed: false,
 		} );
@@ -122,7 +122,7 @@ export class App {
 
 
 		//computer Screen
-		this.canvasTexture = new THREE.CanvasTexture(this.computerScreen.application.canvas);
+		this.canvasTexture = new THREE.CanvasTexture(this.computer.application.canvas);
 		const screenMesh = this.modelScene.getObjectByName('Screen') as THREE.Mesh;
 		if (!screenMesh) throw new Error('No Screen Mesh');
 
@@ -130,6 +130,7 @@ export class App {
 			map: this.canvasTexture,
 			roughness: 0.5,
 			metalness: 0.5,
+			side: THREE.DoubleSide
 		});
 
 		this.canvasTexture.needsUpdate = true;
@@ -147,9 +148,9 @@ export class App {
 
 			window.addEventListener('keydown', (e: KeyboardEvent) => {
 				if (e.code.match(/F\d/g)) e.preventDefault();
-				this.computerScreen.onKeyboardEvent(e);
+				this.computer.onKeyboardEvent(e);
 
-				if(e.code === 'Enter' || e.code === 'NumpadEnter') this.computerScreen.onInputEnter(e);
+				if(e.code === 'Enter' || e.code === 'NumpadEnter') this.computer.onInputEnter(e);
 
 				const obj = this.modelScene.getObjectByName(e.code) as THREE.Mesh | undefined;
 				if(!obj) return;
@@ -179,9 +180,9 @@ export class App {
 				const centerMouseVector = normalizedMousePos.sub(new THREE.Vector2(0.5, 0.5)).multiplyScalar(0.5);
 				const displacedPos = new THREE.Vector2(basePos.x, basePos.z).add(centerMouseVector)
 
-				this.mouseModel.position.x = displacedPos.x
+				this.mouseModel.position.x = displacedPos.x;
 				this.mouseModel.position.z = displacedPos.y;
-				this.mouseModel.rotation.y = -displacedPos.x
+				this.mouseModel.rotation.y = -displacedPos.x;
 
 				this.updateCurve();
 
@@ -194,14 +195,14 @@ export class App {
 				this.mousePos = { x: e.x, y: e.y }
 			});
 
-			window.addEventListener('wheel', (e) => this.computerScreen.onWheelEvent(e, this.castedObjects[0]?.object.name === 'Screen'));
+			window.addEventListener('wheel', (e) => this.computer.onWheelEvent(e, this.castedObjects[0]?.object.name === 'Screen'));
 		}
 
 		
 		//window.addEventListener('DOMContentLoaded', loadEvents)
 		loadEvents();
-		this.textInput.addEventListener('input', (e: Event) => this.computerScreen.onInputChange(e) );
-		// this.textInput.addEventListener('change', (e: Event) => this.computerScreen.onInputEnter(e) );
+		this.textInput.addEventListener('input', (e: Event) => this.computer.onInputChange(e) );
+		// this.textInput.addEventListener('change', (e: Event) => this.computer.onInputEnter(e) );
 
 	}
 	

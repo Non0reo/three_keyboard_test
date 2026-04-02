@@ -6,7 +6,7 @@ import type { Vec2 } from '../../../types/vec';
 const svgTexture = await PIXI.Assets.load('textures/programs/DVD_logo.svg');
 
 export class DVDLockscreenProgram extends BaseProgram {
-  id = 'DVDLockscreen'
+  programID = 'DVD'
   logo: PIXI.Texture;
   sprite: PIXI.Sprite;
   velocity: PIXI.Point;
@@ -38,16 +38,16 @@ export class DVDLockscreenProgram extends BaseProgram {
   }
 
   update(_deltaTime: number, _time: number): void {
-    const bounds = this.sprite.getBounds()
+    const reflectVectFrom = (plane: 'x' | 'y') => {
+      const planeValues = plane === 'x' ? [1, 0] : [0, 1];
+      this.velocity.reflect( new PIXI.Point(...planeValues).rotate(Math.random() * 0.2 - 0.1).normalize(), this.velocity );
+      this.sprite.position[plane] += this.velocity[plane] * _deltaTime;
+      this.randomColor();
+    }
 
-    if (bounds.minX < 0 || this.sizes.x < bounds.maxX) {
-      this.velocity.reflect( new PIXI.Point(1, 0).normalize(), this.velocity );
-      this.randomColor();
-    };
-    if (bounds.minY < 0 || this.sizes.y < bounds.maxY) {
-      this.velocity.reflect( new PIXI.Point(0, 1).normalize(), this.velocity );
-      this.randomColor();
-    };
+    const bounds = this.sprite.getBounds();
+    if (bounds.minX < 0 || this.sizes.x < bounds.maxX) reflectVectFrom('x');
+    if (bounds.minY < 0 || this.sizes.y < bounds.maxY) reflectVectFrom('y');
 
     this.sprite.position.x += this.velocity.x * _deltaTime;
     this.sprite.position.y += this.velocity.y * _deltaTime;

@@ -11,11 +11,11 @@ export function parseCommand(command: string, context?: ComputerOS): Message[] {
 
   switch (firstToken) {
     case 'help':  return [{ content: "EXE HELP", state: 'info' }, { content: helpSheet, state: 'return' }];
-    case 'greet': return [{ content: "*** Nono Shell v1.0.0 ***", state: 'info' }];
+    case 'greet': return [{ content: "Nono Shell v1.0.0", state: 'info' }];
     case 'echo':  return [{ content: args, state: 'return' }];
     case 'exit':
       context?.forceExitProgram();
-      break;
+      return [];
     case 'run':  
       const hasChangedProgram = context?.setProgram(context.getProgramByName(args));
       console.log(hasChangedProgram, context?.getProgramByName(args))

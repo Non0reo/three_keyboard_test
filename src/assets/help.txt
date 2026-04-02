@@ -1,6 +1,10 @@
 
 > help          : get this help message
 > greet         : gives version of shell
+> echo          : print in the terminal argument
+> exit          : exit the program
 > run [program] : run a program from the following list
     - DVD
-    - 
+    - Shell
+
+Ctrl+C or Escape to exit the program and display shell

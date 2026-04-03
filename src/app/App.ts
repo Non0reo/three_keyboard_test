@@ -84,7 +84,7 @@ export class App {
 		dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
 		loader.setDRACOLoader(dracoLoader);
 
-		this.keyModel = await loader.loadAsync('models/seance2.glb');
+		this.keyModel = await loader.loadAsync('models/seance6.glb');
 		this.modelScene = this.keyModel.scene;
 		this.scene.add( this.modelScene );
 		console.log(this.modelScene)

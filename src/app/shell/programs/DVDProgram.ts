@@ -40,7 +40,11 @@ export class DVDProgram extends BaseProgram {
   update(_deltaTime: number, _time: number): void {
     const reflectVectFrom = (plane: 'x' | 'y') => {
       const planeValues = plane === 'x' ? [1, 0] : [0, 1];
-      this.velocity.reflect( new PIXI.Point(...planeValues).rotate(Math.random() * 0.2 - 0.1).normalize(), this.velocity );
+
+      //const velocityN = this.velocity.normalize();
+      //const velocityAngle = Math.a
+
+      this.velocity.reflect( new PIXI.Point(...planeValues).rotate(Math.random() * 0.4 - 0.2).normalize(), this.velocity );
       this.sprite.position[plane] += this.velocity[plane] * _deltaTime;
       this.randomColor();
     }

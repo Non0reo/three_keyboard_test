@@ -46,7 +46,7 @@ export class ShellProgram extends BaseProgram {
     this.drawnText.chars.forEach((char, i) => {
       animate(char, {
         alpha: [0, 1],
-        delay: i * 10,
+        delay: i * 5,
         duration: 100,
         ease: steps(1)
       })
@@ -86,6 +86,6 @@ export class ShellProgram extends BaseProgram {
     const scrollAmount = Math.sign(_event.deltaY) * -20;
 		const textPosition = scrollAmount + this.drawnText.position.y;
 
-		this.drawnText.position.y = Math.min(0, textPosition);
+		this.drawnText.position.y = Math.max(Math.min(0, textPosition), -this.drawnText.height);
   }
 }

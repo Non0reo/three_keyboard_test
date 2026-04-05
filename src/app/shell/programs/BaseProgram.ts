@@ -19,7 +19,7 @@ export class BaseProgram extends PIXI.Container implements Program {
   }
 
   async initProgram(): Promise<void> {};
-  async disposeProgram(): Promise<void> { this.removeFromParent() }
+  async disposeProgram(): Promise<void> {}
   update(_deltaTime: number, _time: number): void {};
   
   onKeyboardEvent(_event: KeyboardEvent): void {};

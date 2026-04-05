@@ -42,7 +42,10 @@ export class App {
 		this.initEvents();
 
 		this.camera.position.set(-1, 1, 2.5);
-		this.orbit = new OrbitControls(this.camera, this.renderer.domElement)
+		this.orbit = new OrbitControls(this.camera, this.renderer.domElement);
+		this.orbit.enableDamping = true;
+		this.orbit.dampingFactor = 0.07;
+
 		this.renderer.setAnimationLoop(this.update.bind(this));
 	}
 
@@ -84,7 +87,7 @@ export class App {
 		dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
 		loader.setDRACOLoader(dracoLoader);
 
-		this.keyModel = await loader.loadAsync('models/seance6.glb');
+		this.keyModel = await loader.loadAsync('models/keyModel.glb');
 		this.modelScene = this.keyModel.scene;
 		this.scene.add( this.modelScene );
 		console.log(this.modelScene)
@@ -98,14 +101,14 @@ export class App {
 		this.mouseModel = this.modelScene.getObjectByName('Mouse') as THREE.Object3D;
 		this.mouseModel.userData = {basePos: JSON.parse(JSON.stringify(this.mouseModel.position)) as Vec3};
 		console.log(this.mouseModel)
-		console.log(this.modelScene.getObjectByName('MouseTip'))
+		console.log(this.modelScene.getObjectByName('ComputerCableTip'))
 
 		//mouse cable
 		this.mouseCableCurve = new THREE.CubicBezierCurve3(
 			this.modelScene.getObjectByName('MouseTip')?.position,
 			new THREE.Vector3(1.5, 0, 0),
-			new THREE.Vector3(1.5, 0, 0),
-			this.modelScene.getObjectByName('ComputerCableTip')?.position,
+			new THREE.Vector3(1, 0, 0.1),
+			this.modelScene.getObjectByName('ComputerCableTip')?.getWorldPosition(new THREE.Vector3()),
 		);
 
 		const points = this.mouseCableCurve.getPoints( 50 ).map(point => [point.x, point.y, point.z]).flat();

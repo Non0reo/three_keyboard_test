@@ -1,10 +1,9 @@
 import * as PIXI from 'pixi.js';
 import { createCrtFilterPipeline } from '@blockstacking/jims-shaders';
 import type { Vec2 } from '../types/vec';
-import { Shell } from './shell/ShellManager';
 import type { Program } from '../types/shell';
-import { ShellProgram } from './shell/programs/Shell';
-import { DVDLockscreenProgram } from './shell/programs/DVDLockscreen';
+import { Shell } from './shell/ShellManager';
+import { DVDProgram, ShellProgram, WebcamProgram } from './shell/programs';
 
 export class ComputerOS {
 	
@@ -19,7 +18,8 @@ export class ComputerOS {
 	activeProgram?: Program;
 	programs: Program[] = [
 		new ShellProgram(this.sizes, this.shell, this),
-		new DVDLockscreenProgram(this.sizes),
+		new DVDProgram(this.sizes),
+		new WebcamProgram(this.sizes)
 	]
 	
 	constructor() {
@@ -78,7 +78,7 @@ export class ComputerOS {
 	}
 	
 	onKeyboardEvent(event: KeyboardEvent) {
-		const isCtrlCPressed = (event.ctrlKey || event.metaKey) && event.code === 'KeyC';
+		const isCtrlCPressed = (event.ctrlKey || event.metaKey) && event.code === 'KeyC' && event.shiftKey;
 		const isEscape = event.code === 'Escape';
 		if ( isCtrlCPressed || isEscape) {
 			this.setProgram(this.getProgramByName('Shell'));
@@ -109,6 +109,7 @@ export class ComputerOS {
 			program.visible = program.isActiveProgram = false;
 		});
 
+		this.activeProgram?.disposeProgram();
 		this.activeProgram = setProgram; //new program
 		setProgram.visible = setProgram.isActiveProgram = true;
 		setProgram.initProgram();

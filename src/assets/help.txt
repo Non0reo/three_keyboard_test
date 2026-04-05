@@ -6,5 +6,6 @@
 > run [program] : run a program from the following list
     - DVD
     - Shell
+    - Webcam    (Webcam needed)
 
 Ctrl+C or Escape to exit the program and display shell

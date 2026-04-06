@@ -78,7 +78,7 @@ export class ComputerOS {
 	}
 	
 	onKeyboardEvent(event: KeyboardEvent) {
-		const isCtrlCPressed = (event.ctrlKey || event.metaKey) && event.code === 'KeyC' && event.shiftKey;
+		const isCtrlCPressed = (event.ctrlKey || event.metaKey) && event.code === 'KeyC' && event.altKey;
 		const isEscape = event.code === 'Escape';
 		if ( isCtrlCPressed || isEscape) {
 			this.setProgram(this.getProgramByName('Shell'));

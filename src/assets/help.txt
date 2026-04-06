@@ -3,9 +3,10 @@
 > greet         : gives version of shell
 > echo          : print in the terminal argument
 > exit          : exit the program
+> programs      : gives the descriptions of all available programs
 > run [program] : run a program from the following list
     - DVD
     - Shell
     - Webcam    (Webcam needed)
 
-Ctrl+C or Escape to exit the program and display shell
+Ctrl+Alt+C or Escape to exit the program and display shell

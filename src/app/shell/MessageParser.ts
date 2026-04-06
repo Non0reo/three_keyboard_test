@@ -16,6 +16,7 @@ export function parseCommand(command: string, context?: ComputerOS): Message[] {
     case 'exit':
       context?.forceExitProgram();
       return [];
+    case 'programs': return [{ content: "Program List", state: 'info' }, { content: context?.programs.map(p => `- ${p.programID}:  ${p.programDescription}`).join('\n') ?? "No Programs", state: 'return' }];
     case 'run':  
       const hasChangedProgram = context?.setProgram(context.getProgramByName(args));
       console.log(hasChangedProgram, context?.getProgramByName(args))

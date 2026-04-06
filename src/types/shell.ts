@@ -13,6 +13,7 @@ type Message = {
 
 interface Program extends PIXI.Container {
   programID: string;
+  programDescription?: string;
   shell?: Shell;
   sizes: Vec2;
   isActiveProgram: boolean;

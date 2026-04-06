@@ -6,7 +6,8 @@ import type { Vec2 } from '../../../types/vec';
 import type { ComputerOS } from '../../Computer';
 
 export class ShellProgram extends BaseProgram {
-  programID = 'Shell'
+  programID = 'Shell';
+  programDescription = "A simple terminal for the OS";
   textInput: HTMLInputElement = document.querySelector('#computer-screen-textinput') as HTMLInputElement;
   drawnText: PIXI.SplitText;
   context: ComputerOS;

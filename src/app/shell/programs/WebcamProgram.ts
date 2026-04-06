@@ -5,6 +5,7 @@ import { BaseProgram } from './BaseProgram';
 
 export class WebcamProgram extends BaseProgram implements Program {
 	programID = 'Webcam';
+  programDescription = "Display the camera feed on the screen. Require a camera input";
   videoElement: HTMLVideoElement;
   stream?: MediaStream;
   isVideoPlaying: boolean = false;

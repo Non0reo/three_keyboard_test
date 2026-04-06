@@ -7,6 +7,7 @@ const svgTexture = await PIXI.Assets.load('textures/programs/DVD_logo.svg');
 
 export class DVDProgram extends BaseProgram {
   programID = 'DVD'
+  programDescription = "The famous DVD Lockscreen.";
   logo: PIXI.Texture;
   sprite: PIXI.Sprite;
   velocity: PIXI.Point;

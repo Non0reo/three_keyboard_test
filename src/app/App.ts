@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { animate } from 'animejs';
-import { GLTFLoader, DRACOLoader, Line2, LineGeometry, LineMaterial, OrbitControls, type GLTF, HDRLoader, AnaglyphEffect } from 'three/examples/jsm/Addons.js';
+import { GLTFLoader, DRACOLoader, Line2, LineGeometry, LineMaterial, OrbitControls, type GLTF, HDRLoader, AnaglyphEffect, TrackballControls } from 'three/examples/jsm/Addons.js';
 import type { Vec2, Vec3 } from '../types/vec'
 import { ComputerOS } from './Computer';
 
@@ -12,6 +12,7 @@ export class App {
 	scene: THREE.Scene = new THREE.Scene();
 	camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 	orbit: OrbitControls;
+	trackball: TrackballControls;
 	effect: AnaglyphEffect = new AnaglyphEffect(this.renderer)
 
 	raycast: THREE.Raycaster = new THREE.Raycaster();
@@ -46,11 +47,20 @@ export class App {
 		this.orbit.enableDamping = true;
 		this.orbit.dampingFactor = 0.07;
 
+		this.trackball = new TrackballControls(this.camera, this.renderer.domElement);
+		// this.trackball.noPan = true;
+		// this.trackball.noRotate = true;
+		// this.trackball.noZoom = false;
+		// this.trackball.zoomSpeed = 0.8;
+
 		this.renderer.setAnimationLoop(this.update.bind(this));
 	}
 
 	update() {
+		// const target = this.orbit.target;
+		// this.trackball.target.set(target.x, target.y, target.z);
 		this.orbit.update();
+		// this.trackball.update();
 
 		if(this.canvasTexture) this.canvasTexture.needsUpdate = true;
 
@@ -150,7 +160,7 @@ export class App {
 			})
 
 			window.addEventListener('keydown', (e: KeyboardEvent) => {
-				if (e.code.match(/F\d/g)) e.preventDefault();
+				if (e.code.match(/F\d/g) && e.code !== 'F11') e.preventDefault();
 				this.computer.onKeyboardEvent(e);
 
 				if(e.code === 'Enter' || e.code === 'NumpadEnter') this.computer.onInputEnter(e);

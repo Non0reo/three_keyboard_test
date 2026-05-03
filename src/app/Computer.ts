@@ -74,6 +74,9 @@ export class ComputerOS {
 
 	update(_deltaTime: number, _time: number) {
 		this.activeProgram?.update(_deltaTime, _time);
+
+		if (!this.activeProgram) this.noSignalText.visible = (_time / 1000) % 2 > 1;
+
 		this.application.render();
 	}
 	
